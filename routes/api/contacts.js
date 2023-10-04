@@ -9,19 +9,39 @@ const router = express.Router();
 const contactAddSchema = Joi.object({
   name: Joi.string()
     .required()
+    .max(30)
     .messages({ "any.required": "missing required name" }),
   email: Joi.string()
+    .email()
     .required()
     .messages({ "any.required": "missing required email" }),
   phone: Joi.string()
     .required()
-    .messages({ "any.required": "missing required phone" }),
+    .pattern(
+      new RegExp(
+        /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/
+      )
+    )
+    .messages({
+      "any.required": "missing required phone",
+      "string.pattern.base":
+        "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +",
+    }),
 });
 
 const contactUpdateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
+  name: Joi.string().max(30),
+  email: Joi.string().email(),
+  phone: Joi.string()
+    .pattern(
+      new RegExp(
+        /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/
+      )
+    )
+    .messages({
+      "string.pattern.base":
+        "Phone number must be digits and can contain spaces, dashes, parentheses and can start with +",
+    }),
 });
 
 router.get("/", async (req, res, next) => {
