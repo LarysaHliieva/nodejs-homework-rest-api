@@ -27,7 +27,7 @@ const deleteById = async (req, res) => {
   if (!result) {
     throw HttpError(404);
   }
-  res.json("contact deleted");
+  res.json({ message: "contact deleted" });
 };
 
 const putById = async (req, res) => {
